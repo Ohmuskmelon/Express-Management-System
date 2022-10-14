@@ -9,6 +9,7 @@ int flag=1;
 char c;
 pthread_t listentid,servicetid; //监听线程ID,服务线程ID；
 
+# define DEFAULT_SIZE 100
 # define BUFF_SIZE 512
 # define SEND_BUFF_SIZE 1024
 # define RECV_BUFF_SIZE 512
@@ -214,6 +215,28 @@ int user_change_password (user user_data, int user_num, int user_id, int passwor
         thread_err("发送数据出错！\n", t_data.buff_index);
     return result;
 }
+
+int user_check_expresses(express exp_data, int exp_num, user user_data, int user_num, int user_id, int* result, thread_data t_data)
+{
+    int result[DEFAULT_SIZE];
+    int express_num = find_user_express(exp_data, exp_num, user_data, user_num, user_id, result);
+    express_info send_message[express_num];
+    for (int i=0; i<express_num; i++)
+    {
+        send_message[i].id = exp_data[result[i]].id;
+        send_message[i].date = exp_data[result[i]].date;
+        send_message[i].time = exp_data[result[i]].time;
+    }
+    sprintf(t_data.msg, "ID为%d的用户查看了快递信息！\n", user_id);
+    add_info(t_data.msg);
+    memcpy(t_data.send_buf, send_message, sizeof(send_message));
+    ret = send(t_data.conn_fd, t_data.send_buf, sizeof(send_message), 0);
+    if (ret < 0)
+        thread_err("发送数据出错！\n", t_data.buff_index);
+    return express_num;
+}
+
+
 
 //消息内容输出函数
 void display_info(char *msg)
