@@ -10,6 +10,7 @@ typedef struct user_info
     int express_num;
 } user_info;
 
+
 typedef struct temp_ID
 {
     int user_id;
@@ -85,6 +86,15 @@ int back_ID(char *arr)
                 }
                 return sum;
         }
+    }
+}
+int first_ID(char *arr)
+{
+    int sum=0;
+    for(int i=0;i<strlen(arr);++i)
+    {
+        int j=i;
+        while()
     }
 }
 temp_ID store(char *arr)
