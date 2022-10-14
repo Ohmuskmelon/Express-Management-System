@@ -68,9 +68,9 @@ void user_sign_up (user user_data, int *user_num, int user_id, int password, thr
     char *result_message;
     switch (send_message)
     {
-        case ALREADY_EXITS: result_message = "账号已存在！";
-        case NOT_OK: result_message = "创建失败！";
-        default: result_message = "创建成功！";
+        case ALREADY_EXITS: result_message = "账号已存在！"; break;
+        case NOT_OK: result_message = "创建失败！"; break;
+        default: result_message = "创建成功！"; break;
     }
     sprintf(t_data.msg, "ID为%d的用户申请注册！,%s\n", user_id, result_message);
     add_info(t_data.msg);
@@ -80,16 +80,139 @@ void user_sign_up (user user_data, int *user_num, int user_id, int password, thr
         thread_err("发送数据出错！\n", t_data.buff_index);
 }
 
-void user_sign_in (user user_data, int user_num, int user_id, int passward, thread_data t_data)
+/* 用户登录处理函数 */
+int user_sign_in (user user_data, int user_num, int user_id, int passward, thread_data t_data)
 {
     int send_message;
     int result = check_user(user_data, user_num, user_id, passward);
     switch (result)
     {
-        case -1: send_message = 
-        case -2:
-        default:
+        case -1: send_message = NOT_EXITS; break;
+        case -2: send_message = WRONG_PASSWORD; break;
+        default: send_message = OK; break;
     }
+    char *result_message;
+    switch (send_message)
+    {
+        case NOT_EXITS: result_message = "用户不存在！"; break;
+        case WRONG_PASSWORD: result_message = "密码错误！"; break;
+        default: result_message = "登录成功！"; break;
+    }
+    sprintf(t_data.msg, "ID为%d的用户申请登录！,%s\n", user_id, result_message);
+    add_info(t_data.msg);
+    memcpy(t_data.send_buf, &send_message, sizeof(send_message));
+    ret = send(t_data.conn_fd, t_data.send_buf, sizeof(send_message), 0);
+    if (ret < 0)
+        thread_err("发送数据出错！\n", t_data.buff_index);
+    return result;
+}
+
+/* 用户更改密码处理函数 */
+int user_change_password (user user_data, int user_num, int user_id, int password, thread_data t_data)
+{
+    int send_message;
+    int result = change_user_password(user_data, user_num, user_id, password);
+    switch (result)
+    {
+        case -1: send_message = NOT_EXITS; break;
+        default: send_message = OK; break;
+    }
+    char *result_message;
+    switch (send_message)
+    {
+        case NOT_EXITS: result_message = "用户不存在！"; break;
+        default: result_message = "更改密码成功！"; break;
+    }
+    sprintf(t_data.msg, "ID为%d的用户申请更改密码！,%s\n", user_id, result_message);
+    add_info(t_data.msg);
+    memcpy(t_data.send_buf, &send_message, sizeof(send_message));
+    ret = send(t_data.conn_fd, t_data.send_buf, sizeof(send_message), 0);
+    if (ret < 0)
+        thread_err("发送数据出错！\n", t_data.buff_index);
+    return result;
+}
+
+/* 管理员注册处理函数 */
+void user_sign_up (user user_data, int *user_num, int user_id, int password, thread_data t_data)
+{
+    int send_message;
+    int result = add_user(user_data, user_num, USER_NUMBER, user_id, password);
+    switch(result)
+    {
+        case -1 : send_message = ALREADY_EXITS; break;
+        case 0: send_message = NOT_OK; break;
+        default:
+        {
+            user_num = result;
+            send_message = OK;
+            break;
+        }
+    }
+    char *result_message;
+    switch (send_message)
+    {
+        case ALREADY_EXITS: result_message = "账号已存在！"; break;
+        case NOT_OK: result_message = "创建失败！"; break;
+        default: result_message = "创建成功！"; break;
+    }
+    sprintf(t_data.msg, "ID为%d的管理员申请注册！,%s\n", user_id, result_message);
+    add_info(t_data.msg);
+    memcpy(t_data.send_buf, &send_message, sizeof(send_message));
+    ret = send(t_data.conn_fd, t_data.send_buf, sizeof(send_message), 0);
+    if (ret < 0)
+        thread_err("发送数据出错！\n", t_data.buff_index);
+}
+
+/* 管理员登录处理函数 */
+int user_sign_in (user user_data, int user_num, int user_id, int passward, thread_data t_data)
+{
+    int send_message;
+    int result = check_user(user_data, user_num, user_id, passward);
+    switch (result)
+    {
+        case -1: send_message = NOT_EXITS; break;
+        case -2: send_message = WRONG_PASSWORD; break;
+        default: send_message = OK; break;
+    }
+    char *result_message;
+    switch (send_message)
+    {
+        case NOT_EXITS: result_message = "用户不存在！"; break;
+        case WRONG_PASSWORD: result_message = "密码错误！"; break;
+        default: result_message = "登录成功！"; break;
+    }
+    sprintf(t_data.msg, "ID为%d的管理员申请登录！,%s\n", user_id, result_message);
+    add_info(t_data.msg);
+    memcpy(t_data.send_buf, &send_message, sizeof(send_message));
+    ret = send(t_data.conn_fd, t_data.send_buf, sizeof(send_message), 0);
+    if (ret < 0)
+        thread_err("发送数据出错！\n", t_data.buff_index);
+    return result;
+}
+
+/* 用户更改密码处理函数 */
+int user_change_password (user user_data, int user_num, int user_id, int password, thread_data t_data)
+{
+    int send_message;
+    int result = change_user_password(user_data, user_num, user_id, password);
+    switch (result)
+    {
+        case -1: send_message = NOT_EXITS; break;
+        default: send_message = OK; break;
+    }
+    char *result_message;
+    switch (send_message)
+    {
+        case NOT_EXITS: result_message = "用户不存在！"; break;
+        default: result_message = "更改密码成功！"; break;
+    }
+    sprintf(t_data.msg, "ID为%d的管理员申请更改密码！,%s\n", user_id, result_message);
+    add_info(t_data.msg);
+    memcpy(t_data.send_buf, &send_message, sizeof(send_message));
+    ret = send(t_data.conn_fd, t_data.send_buf, sizeof(send_message), 0);
+    if (ret < 0)
+        thread_err("发送数据出错！\n", t_data.buff_index);
+    return result;
 }
 
 //消息内容输出函数
