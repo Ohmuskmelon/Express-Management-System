@@ -225,11 +225,10 @@ int manger_signup(int id, int password)
     else if (temo.type == ALREADY_EXITS)
         sprintf(msg, "账号已经存在");
     else
-    {
         sprintf(msg, "不好意思，服务器出错了。");
-    }
     display_info(msg);
 }
+
 // manger_sign_in函数
 int manger_signin(int id, int password)
 {
@@ -403,7 +402,7 @@ void otherOperate()
                 printf("您还未登录！\n");
                 break;
             }
-            printf("请输入要添加的快递号：\n");
+            printf("请输入添加快递的用户：\n");
             scanf("%d", &expid);
             manger_addsingle(expid);
             break;

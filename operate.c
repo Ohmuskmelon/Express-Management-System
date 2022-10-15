@@ -1,3 +1,59 @@
+#include <stdbool.h>
+#include <time.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/un.h>
+#include <string.h>
+#include <pthread.h>
+
+#define TRUE 1
+#define FALSE 0
+
+time_t now;
+
+/*server.c*/
+
+#define USER_NUMBER 100
+#define EXPRESS_NUMBER 100
+
+typedef struct user_message
+{
+    int type;
+    int id;
+    int password;
+} user_message;
+
+typedef struct user_info
+{
+    int id;
+    int password;
+    int express_num;
+    pthread_mutex_t user_info_mutex;
+} user_info;
+
+typedef user_info user[USER_NUMBER];
+
+typedef struct express_info
+{
+    int id;
+    int user_id;
+    int isIn;
+    int date;
+    int time;
+    pthread_mutex_t express_info_mutex;
+} express_info;
+
+typedef express_info express[EXPRESS_NUMBER];
+
 /* 根据id查找用户，查找成功返回用户数据的下标，查找失败返回-1 */
 int find_user(user data, int user_num, int user_id)
 {
@@ -22,7 +78,6 @@ int add_user(user data, int user_num, int user_maxnum, int user_id, int password
     cnt_user.id = user_id;
     cnt_user.password = password;
     cnt_user.express_num = 0;
-    cnt_user.isIn = TRUE;
     data[user_num] = cnt_user;
     user_num++;
     pthread_mutex_unlock(&data[ori_user_num].user_info_mutex);
@@ -38,7 +93,6 @@ int check_user(user data, int user_num, int user_id, int password)
     if (data[user_index].password != password)
         return -2;
     pthread_mutex_lock(&data[user_num].user_info_mutex);
-    data[user_index].isIn = TRUE;
     pthread_mutex_unlock(&data[user_num].user_info_mutex);
     return user_index;
 }
@@ -51,7 +105,6 @@ int change_user_password(user data, int user_num, int user_id, int password)
         return -1;
     pthread_mutex_lock(&data[user_index].user_info_mutex);
     data[user_index].password = password;
-    data[user_index].isIn = TRUE;
     pthread_mutex_unlock(&data[user_num].user_info_mutex);
     return user_index;
 }
@@ -61,8 +114,6 @@ int add_express(express exp_data, user user_data, int exp_num, int exp_maxnum, i
 {
     int ori_exp_num = user_num;
     pthread_mutex_lock(&exp_data[ori_exp_num].express_info_mutex);
-    int user_index = find_user(user_data, user_num, user_id);
-    pthread_mutex_lock(&user_data[user_index].user_info_mutex);
     time_t time_ptr;
     struct tm *tmp_ptr = NULL;
     time(&time_ptr);
@@ -83,8 +134,7 @@ int add_express(express exp_data, user user_data, int exp_num, int exp_maxnum, i
     cnt_exp.time = hour*10000+minute*100+sec;
     exp_data[exp_num] = cnt_exp;
     exp_num++;
-    user_data[user_index].express_num++;
-    pthread_mutex_unlock(&user_data[user_index].user_info_mutex);
+    user_data[find_user(user_data, user_num, user_id)].express_num++;
     pthread_mutex_unlock(&exp_data[ori_exp_num].express_info_mutex);
     return exp_num;
 }
@@ -145,4 +195,66 @@ void remove_express_by_id(express exp_data, int exp_num, int exp_id, user user_d
     user_data[user_index].express_num--;
     pthread_mutex_unlock(&user_data[user_index].user_info_mutex);
     pthread_mutex_unlock(&exp_data[exp_index].express_info_mutex);
+}
+
+int main()
+{
+    user u;
+    express p;
+    int user_num = 0;
+    int exp_num = 0;
+
+    user_num = add_user(u, user_num, USER_NUMBER, 12345, 19999);
+    user_num = add_user(u, user_num, USER_NUMBER, 222222, 222229);
+    printf("creat user\n");
+    printf("%d %d\n", u[0].id, u[0].password);
+    printf("\n");
+
+    printf("find user 12345:\n");
+    printf("%d\n", find_user(u, user_num, 222222));
+    printf("\n");
+
+    int check1 = check_user(u, user_num, 12345, 18888);
+    int check2 = check_user(u, user_num, 12345, 19999);
+    printf("check id:12345 pass:18888 id:12345 pass:19999\n");
+    if (check1 == -2)
+        printf("Wrong!\n");
+    if (check2 >= 0)
+        printf("Yes!\n");
+    printf("\n");
+
+    int a = change_user_password(u, user_num, 12345, 1111111);
+    for (int i = 0; i < user_num; i++)
+        printf("%d %d\n", u[i].id, u[i].password);
+
+    exp_num = add_express(p, u, exp_num, EXPRESS_NUMBER, user_num, 12345);
+    exp_num = add_express(p, u, exp_num, EXPRESS_NUMBER, user_num, 12345);
+    exp_num = add_express(p, u, exp_num, EXPRESS_NUMBER, user_num, 222222);
+    exp_num = add_express(p, u, exp_num, EXPRESS_NUMBER, user_num, 12345);
+    exp_num = add_express(p, u, exp_num, EXPRESS_NUMBER, user_num, 222222);
+    printf("add expresses and check all expresses:\n");
+    for (int i = 0; i < exp_num; i++)
+        printf("%d %d %d %d %d\n", p[i].id, p[i].user_id, p[i].isIn, p[i].date, p[i].time);
+    printf("\n");
+
+    int result[100];
+    int renum = find_user_express(p, exp_num, u, user_num, 12345, result);
+    express_info list[renum];
+    for (int i=0; i<renum; i++)
+    {
+        list[i].id = p[result[i]].id;
+        list[i].user_id = p[result[i]].user_id;
+    }
+    express_info* output;
+    output = list;
+    printf("find all expresses' indexes from id:12345:\n");
+    for (int i = 0; i < renum; i++)
+        printf("%d %d\n", output[i].id, output[i].user_id);
+    printf("\n");
+    remove_express_by_index(p, exp_num, 0, u, user_num);
+    remove_express_by_id(p, exp_num, 4, u, user_num);
+    printf("check all expresses:\n");
+    for (int i = 0; i < exp_num; i++)
+        printf("%d %d %d %d %d\n", p[i].id, p[i].user_id, p[i].isIn, p[i].date, p[i].time);
+    return 0;
 }

@@ -41,8 +41,8 @@
 
 #define DEFAULT_SIZE 100
 #define BUFF_SIZE 512
-#define SEND_BUFF_SIZE 1024
-#define RECV_BUFF_SIZE 512
+#define SEND_BUFF_SIZE 2048
+#define RECV_BUFF_SIZE 2048
 
 #define DEFAULT_TYPE 0
 #define USER_SIGN_UP 1
@@ -67,7 +67,7 @@
 /*定义线程缓冲区的使用状态*/
 #define BUFF_OCCUPIED 1
 #define BUFF_FREED 0
-#define BUFF_SIZE 512
+// #define BUFF_SIZE 512
 
 #define USER_NUMBER 100
 #define EXPRESS_NUMBER 100
@@ -228,7 +228,7 @@ void disconnect()
 int user_signup(int id, int password)
 {
     char msg[512];
-    char send_buf[512], recv_buf[512];
+    char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
     send_message temp;
     recv_message temo;
@@ -266,7 +266,7 @@ int user_signup(int id, int password)
 int user_signin(int id, int password)
 {
     char msg[512];
-    char send_buf[512], recv_buf[512];
+    char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
     send_message temp;
     recv_message temo;
@@ -306,7 +306,7 @@ int user_signin(int id, int password)
 int user_changepass(int id, int password)
 {
     char msg[512];
-    char send_buf[512], recv_buf[512];
+    char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
     send_message temp;
     recv_message temo;
@@ -344,7 +344,7 @@ int user_changepass(int id, int password)
 int user_check(int id)
 {
     char msg[512];
-    char send_buf[512], recv_buf[512];
+    char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
     send_message temp;
     recv_message temo;
@@ -371,15 +371,15 @@ int user_check(int id)
     for (int i = 0; i < temo.list_num; i++)
     {
         sprintf(msg, "\t快递单号：%d, 用户名：%d, 时间：%d%d\n", temo.express_list[i].id, temo.express_list[i].user_id, temo.express_list[i].date, temo.express_list[i].time);
+        display_info(msg);
     }
-    display_info(msg);
 }
 
 // user_get all exp
 int user_getall(int id)
 {
     char msg[512];
-    char send_buf[512], recv_buf[512];
+    char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
     send_message temp;
     recv_message temo;
@@ -470,9 +470,9 @@ void otherOperate()
                 printf("您还未登录！\n");
                 break;
             }
-            printf("请输入要查询的快递号：\n");
-            scanf("%d", &expid);
-            user_check(expid);
+            printf("请输入要查询的ID：\n");
+            scanf("%d", &user_id);
+            user_check(user_id);
             break;
         }
         case 'o':

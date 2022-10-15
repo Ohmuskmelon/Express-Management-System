@@ -57,7 +57,7 @@ void * service_thread(void *p)
             case MAGAGER_CHANGE_PASSWORD: manager_change_password(manager_data, *manager_num, user_id, password, &t_data); break;
             case CHECK_ALL_EXPRESSES: user_check_expresses(exp_data, *exp_num, user_data, *user_num, user_id, &t_data); break;
             case GET_ALL_EXPRESS: get_all_expresses_out(exp_data, *exp_num, user_data, *user_num, user_id, &t_data); break;
-            case ADD_EXPRESS: manager_add_express(exp_data, user_data, *exp_num, EXPRESS_NUMBER, *user_num, user_id, &t_data); break;
+            case ADD_EXPRESS: manager_add_express(exp_data, user_data, exp_num, MAX_EXPRESS_NUM, *user_num, user_id, &t_data); break;
             default: break;
         }
     }
