@@ -23,7 +23,7 @@ void user_sign_up (user user_data, int *user_num, int user_id, int password, thr
         default: result_message = "创建成功！"; break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的用户申请注册！,%s *\n", user_id, result_message);
+    sprintf(t_data->msg, "* ID为%d的用户申请注册,%s *\n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -51,12 +51,12 @@ int user_sign_in (user user_data, int user_num, int user_id, int password, threa
         default: result_message = "登录成功！"; break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的用户申请登录！,%s* \n", user_id, result_message);
+    sprintf(t_data->msg, "* ID为%d的用户申请登录, %s * \n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
     if (t_data->ret < 0)
-        thread_err("* 发送数据出错！ *\n", t_data->buff_index);
+        thread_err("* 发送数据出错! *\n", t_data->buff_index);
     return result;
 }
 
@@ -78,7 +78,7 @@ int user_change_password (user user_data, int user_num, int user_id, int passwor
         default: result_message = "更改密码成功！"; break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的用户申请更改密码！ *,%s\n", user_id, result_message);
+    sprintf(t_data->msg, "* ID为%d的用户申请更改密码, %s *\n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -112,7 +112,7 @@ void manager_sign_up (user user_data, int *user_num, int user_id, int password, 
         default: result_message = "创建成功！"; break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的管理员申请注册！,%s *\n", user_id, result_message);
+    sprintf(t_data->msg, "* ID为%d的管理员申请注册, %s *\n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -140,7 +140,7 @@ int manager_sign_in (user user_data, int user_num, int user_id, int password, th
         default: result_message = "登录成功！"; break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的管理员申请登录！,%s *\n", user_id, result_message);
+    sprintf(t_data->msg, "* ID为%d的管理员申请登录, %s *\n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -167,7 +167,7 @@ int manager_change_password (user user_data, int user_num, int user_id, int pass
         default: result_message = "更改密码成功！"; break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的管理员申请更改密码！,%s *\n", user_id, result_message);
+    sprintf(t_data->msg, "* ID为%d的管理员申请更改密码, %s *\n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -192,7 +192,7 @@ int user_check_expresses(express exp_data, int exp_num, user user_data, int user
     receive_message.express_list = list;
     receive_message.type = OK;
     receive_message.list_num = express_num;
-    sprintf(t_data->msg, "* ID为%d的用户查看了快递信息！ *\n", user_id);
+    sprintf(t_data->msg, "* ID为%d的用户查看了快递信息! *\n", user_id);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -208,7 +208,7 @@ void get_single_express_by_index (express exp_data, int exp_num, int exp_index, 
     receive_message.type = OK;
     remove_express_by_index(exp_data, exp_num, exp_index, user_data, user_num);
     int exp_id = exp_data[exp_index].id;
-    sprintf(t_data->msg, "* ID为%d的用户取出了快递，ID为%d！ *\n", user_id, exp_id);
+    sprintf(t_data->msg, "* ID为%d的用户取出了快递, ID为%d! *\n", user_id, exp_id);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -222,7 +222,7 @@ void get_single_express_by_id (express exp_data, int exp_num, int exp_id, user u
     recv_message receive_message;
     receive_message.type = OK;
     remove_express_by_id(exp_data, exp_num, exp_id, user_data, user_num);
-    sprintf(t_data->msg, "* ID为%d的用户取出了快递，ID为%d！ *\n", user_id, exp_id);
+    sprintf(t_data->msg, "* ID为%d的用户取出了快递, ID为%d! *\n", user_id, exp_id);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -254,9 +254,9 @@ int manager_add_express (express exp_data, user user_data, int exp_num, int exp_
     }
     receive_message.type = type;
     if(result != -1)
-        sprintf(t_data->msg, "* 成功为ID为%d的用户添加快递！ *\n", user_id);
+        sprintf(t_data->msg, "* 成功为ID为%d的用户添加快递! *\n", user_id);
     else
-        sprintf(t_data->msg, "* ID为%d的用户添加快递失败！ *\n", user_id);
+        sprintf(t_data->msg, "* ID为%d的用户添加快递失败! *\n", user_id);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);

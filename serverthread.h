@@ -53,7 +53,7 @@ void * service_thread(void *p)
             case USER_SIGN_IN: user_sign_in(user_data, *user_num, user_id, password, &t_data); break;
             case USER_CHANGE_PASSWORD: user_change_password(user_data, *user_num, user_id, password, &t_data); break;
             case MANAGER_SIGN_UP: manager_sign_up(manager_data, manager_num, user_id, password, &t_data); break;
-            case MAGAGER_SIGN_IN: manager_sign_in(manager_data, *manager_num, user_id, password, &t_data);
+            case MAGAGER_SIGN_IN: manager_sign_in(manager_data, *manager_num, user_id, password, &t_data); break;
             case MAGAGER_CHANGE_PASSWORD: manager_change_password(manager_data, *manager_num, user_id, password, &t_data); break;
             case CHECK_ALL_EXPRESSES: user_check_expresses(exp_data, *exp_num, user_data, *user_num, user_id, &t_data); break;
             case GET_ALL_EXPRESS: get_all_expresses_out(exp_data, *exp_num, user_data, *user_num, user_id, &t_data); break;

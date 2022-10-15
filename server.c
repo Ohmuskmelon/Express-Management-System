@@ -19,14 +19,13 @@ int main ()
     *manager_num = 0;
     *exp_num = 0;
     *user_num = user_read(user_data, USER_NUMBER, *user_num);
-    *user_num = user_read(manager_data, USER_NUMBER, *manager_num);
+    *manager_num = user_read(manager_data, USER_NUMBER, *manager_num);
     printf("**************************  服务器端建立连接  ***************************\n");
     printf("\n");
     startserver();
     otherOperate();
     stopserver();
     write_user(user_data, USER_NUMBER, 0, *user_num);
-    write_manager(manager_data, MANAGER_NUM, 0, *manager_num);
+    write_manager(manager_data, MANAGER_NUMBER, 0, *manager_num);
     return 0;
 }
-

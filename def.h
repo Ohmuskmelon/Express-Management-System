@@ -70,6 +70,7 @@
 
 # define USER_NUMBER 100
 # define EXPRESS_NUMBER 100
+# define MANAGER_NUMBER 100
 
 #define MAX  100//总数
 
@@ -173,3 +174,32 @@ user MANAGER_DATA;
 
 express EXPRESS_DATA;
 
+/* 根据id查找用户，查找成功返回用户数据的下标，查找失败返回-1 */
+int find_user(user data, int user_num, int user_id);
+
+/* 添加用户信息，成功返回目前用户数量，用户已存在返回-1，超出最大用户限制返回0 */
+int add_user(user data, int user_num, int user_maxnum, int user_id, int password);
+
+/* 检查用户输入的密码是否正确，用户不存在返回-1，用户密码错误返回-2，用户密码正确返回用户数据下标 */
+int check_user(user data, int user_num, int user_id, int password);
+
+/* 更改用户密码，成功返回用户数据下标，用户不存在返回-1 */
+int change_user_password(user data, int user_num, int user_id, int password);
+
+/* 添加快递，无法添加快递返回-1，添加成功返回目前快递数量 */
+int add_express(express exp_data, user user_data, int exp_num, int exp_maxnum, int user_num, int user_id);
+
+/* 查找用户所有的快递，成功返回用户快递数量，失败返回0 */
+int find_user_express(express exp_data, int exp_num, user user_data, int user_num, int user_id, int* result);
+
+/* 根据id查找快递，查找成功返回快递数据的下标，查找失败返回-1 */
+int find_single_express(express exp_data, int exp_num, int exp_id);
+
+/* 通过idex移除快递，同时减少相应用户的快递数量，请保证数据正确 */
+void remove_express_by_index(express exp_data, int exp_num, int exp_index, user user_data, int user_num);
+
+/* 通过id移除快递，同时减少相应用户的快递数量，请保证数据正确 */
+void remove_express_by_id(express exp_data, int exp_num, int exp_id, user user_data, int user_num);
+
+/* 用户注册处理函数 */
+void user_sign_up (user user_data, int *user_num, int user_id, int password, thread_data *t_data);

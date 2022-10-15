@@ -423,11 +423,14 @@ void otherOperate()
     printf("\t \t 更改账号密码请按 c\n");
     printf("\t \t 查看快递请按 e\n");
     printf("\t \t 全部取出快递请按 o\n");
-    while ((s = getchar())!='q')
+    while ((s = getchar()) != 'q')
     {
-        getchar();
-        if (s == 'q')
-            disconnect();         
+        printf("\t \t 与服务器断开连接请按 q\n");
+        printf("\t \t 注册账号并登录请按 u\n");
+        printf("\t \t 登录账号请按 i\n");
+        printf("\t \t 更改账号密码请按 c\n");
+        printf("\t \t 查看快递请按 e\n");
+        printf("\t \t 全部取出快递请按 o\n");
         switch (s)
         {
         case 'u':
@@ -438,7 +441,6 @@ void otherOperate()
             scanf("%d", &password);
             user_signup(user_id, password);
             isIn = TRUE;
-            otherOperate();
             break;
         }
         case 'i':
@@ -449,7 +451,6 @@ void otherOperate()
             scanf("%d", &password);
             user_signin(user_id, password);
             isIn = TRUE;
-            otherOperate();
             break;
         }
         case 'c':
@@ -460,7 +461,6 @@ void otherOperate()
             scanf("%d", &password);
             user_changepass(user_id, password);
             isIn = TRUE;
-            otherOperate();
             break;
         }
         case 'e':
@@ -473,7 +473,6 @@ void otherOperate()
             printf("请输入要查询的快递号：\n");
             scanf("%d", &expid);
             user_check(expid);
-            otherOperate();
             break;
         }
         case 'o':
@@ -486,10 +485,19 @@ void otherOperate()
             printf("请输入账号：\n");
             scanf("%d", &user_id);
             user_getall(user_id);
-            otherOperate();
             break;
         }
-        default: break;
+        case 'q':
+        {
+            disconnect();
+            break;
+        }
+        default:
+        {
+            // printf("指令不正确！请重新输入！\n");
+            // otherOperate();
+            break;
+        }
         }
     }
 }
