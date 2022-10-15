@@ -41,8 +41,8 @@
 
 #define DEFAULT_SIZE 100
 #define BUFF_SIZE 512
-#define SEND_BUFF_SIZE 2048
-#define RECV_BUFF_SIZE 2048
+#define SEND_BUFF_SIZE 4096
+#define RECV_BUFF_SIZE 4096
 
 #define DEFAULT_TYPE 0
 #define USER_SIGN_UP 1
@@ -115,7 +115,7 @@ typedef struct send_message
 typedef struct recv_message
 {
     int type;
-    express_info *express_list;
+    express_info express_list[10];
     int list_num;
 } recv_message;
 // typedef struct send_message

@@ -241,26 +241,18 @@ int user_check_expresses(express exp_data, int exp_num, user user_data, int user
 {
     int result[DEFAULT_SIZE];
     int express_num = find_user_express(exp_data, exp_num, user_data, user_num, user_id, result);
-    express_info list[express_num];
-    for (int i = 0; i < express_num; i++)
-    {
-        list[i].id = exp_data[result[i]].id;
-        list[i].user_id = exp_data[result[i]].user_id;
-        list[i].date = exp_data[result[i]].date;
-        list[i].time = exp_data[result[i]].time;
-    }
     recv_message receive_message;
-    receive_message.express_list = list;
     receive_message.type = OK;
     receive_message.list_num = express_num;
-    sprintf(t_data->msg, "* ID为%d的用户查看了快递信息! *\n", user_id);
-    sprintf(t_data->msg, "%d\n", receive_message.list_num);
-    add_info(t_data->msg);
-    for (int i = 0; i < receive_message.list_num; i++)
+    for (int i = 0; i < express_num; i++)
     {
-        sprintf(t_data->msg, "%d %d\n", receive_message.express_list[i].id, receive_message.express_list[i].user_id);
-        add_info(t_data->msg);
+        receive_message.express_list[i].id = exp_data[result[i]].id;
+        receive_message.express_list[i].user_id = exp_data[result[i]].user_id;
+        receive_message.express_list[i].date = exp_data[result[i]].date;
+        receive_message.express_list[i].time = exp_data[result[i]].time;
     }
+    sprintf(t_data->msg, "* ID为%d的用户查看了快递信息! *\n", user_id);
+    add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
     if (t_data->ret < 0)

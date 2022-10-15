@@ -1,7 +1,5 @@
 {
     "files.associations": {
-        "stat.h": "c",
-        "__locale": "c",
-        "locale": "c"
+        "string.h": "c"
     }
 }

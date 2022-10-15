@@ -98,12 +98,17 @@ int find_user_express(express exp_data, int exp_num, user user_data, int user_nu
     int find_num = 0;
     for (int i=0; i<exp_num; i++)
     {
-        if (find_num == exp_num)
+        if (find_num == user_exp_num)
             break;
         if (exp_data[i].user_id == user_id)
         {
-            result[find_num] = i;
-            find_num++;
+            if (exp_data[i].isIn == TRUE)
+            {
+                result[find_num] = i;
+                find_num++;
+            }
+            else
+                continue;
         }
     }
     return user_exp_num;
