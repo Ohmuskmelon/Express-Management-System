@@ -20,9 +20,9 @@ void * service_thread(void *p)
 	t_data.peer_name_len=sizeof(t_data.peer_name);
 	t_data.ret=getpeername(t_data.conn_fd,(struct sockaddr*)&t_data.peer_name, &t_data.peer_name_len);
 	if(t_data.ret==-1) 
-	thread_err("获取远端主机地址出错",t_data.buff_index);
+	thread_err("* 获取远端主机地址出错 *",t_data.buff_index);
 
-	sprintf(t_data.msg,"新连接-->线程ID：%d, 线程缓冲区索引号：%d, 远端地址：%s, 端口号：%d\n",(unsigned short)t_data.pstruct->tid, t_data.buff_index, inet_ntoa(t_data.peer_name.sin_addr), ntohs(t_data.peer_name.sin_port));
+	sprintf(t_data.msg,"* 新连接-->线程ID：%d, 线程缓冲区索引号：%d, 远端地址：%s, 端口号：%d *\n",(unsigned short)t_data.pstruct->tid, t_data.buff_index, inet_ntoa(t_data.peer_name.sin_addr), ntohs(t_data.peer_name.sin_port));
 	add_info(t_data.msg);
 
     while (1)
@@ -31,13 +31,13 @@ void * service_thread(void *p)
 		t_data.ret=recv(t_data.conn_fd,t_data.recv_buf,sizeof(send_message),0);
 		/*接收出错*/
 		if(t_data.ret==-1) {
-			sprintf(t_data.msg,"线程：%d 在连接：%d 接收出错。连接将关闭。\n",(unsigned short)t_data.pstruct->tid, t_data.conn_fd);
+			sprintf(t_data.msg,"* 线程：%d 在连接：%d 接收出错。连接将关闭。 *\n",(unsigned short)t_data.pstruct->tid, t_data.conn_fd);
 			add_info(t_data.msg);
 			thread_err(t_data.msg, t_data.buff_index);
 		}
 		/*ret==0说明客户端连接已关闭*/
 		if(t_data.ret==0) {
-			sprintf(t_data.msg,"线程  %d  的连接( ID：%d ) 客户端已关闭。服务器端连接也将关闭。\n",(unsigned short)t_data.pstruct->tid, t_data.conn_fd);
+			sprintf(t_data.msg,"* 线程  %d  的连接( ID：%d ) 客户端已关闭。服务器端连接也将关闭。 *\n",(unsigned short)t_data.pstruct->tid, t_data.conn_fd);
 			add_info(t_data.msg);
 			close(t_data.conn_fd);
 			free_buff(t_data.buff_index);

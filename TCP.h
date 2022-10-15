@@ -15,7 +15,7 @@ void * listen_thread(void *p)
 		/*分配线程缓冲区*/
 		buffer_index=get_free_buff();
 		if(buffer_index<0) {
-			sprintf(msg,"没有空闲的线程缓冲区。\n");
+			sprintf(msg,"************************  没有空闲的线程缓冲区!  ************************\n");
 			add_info(msg);
 			close(conn_fd);
 			continue;
@@ -32,7 +32,7 @@ void * listen_thread(void *p)
 		/*创建新的服务线程*/
 		ret=pthread_create(&servicetid, NULL, service_thread, &thread_buff[buffer_index]);
 		if(ret==-1) {
-			sprintf(msg,"创建服务线程出错！\n");
+			sprintf(msg,"*************************  创建服务线程出错!  **************************\n");
 			add_info(msg);
 			close(conn_fd);
 			/*释放线程缓冲区*/
@@ -58,7 +58,7 @@ void startserver()
 		/*创建套接字*/
 		listen_fd=socket(AF_INET,SOCK_STREAM,0);
 		if(listen_fd<0) {
-			sprintf(msg,"创建监听套接字出错！ \n");
+			sprintf(msg,"*************************  创建监听套接字出错!  ************************\n");
 			display_info(msg);
 			return;
 		}
@@ -73,7 +73,8 @@ void startserver()
 		/*绑定端口*/
 		ret=bind(listen_fd,(struct sockaddr*)&server, sizeof(server));
 		if(ret<0) {
-			sprintf(msg,"绑定TCP端口：%d 出错！ \n",SERVER_PORT_NO);
+			sprintf(msg,"***********************  绑定TCP端口：%d 出错!  ***********************\n",SERVER_PORT_NO);
+			display_info(msg);
 			display_info(msg);
 			close(listen_fd);
 			return;
@@ -83,14 +84,14 @@ void startserver()
 		listen(listen_fd,5);
 		ret=pthread_create(&listentid, NULL, listen_thread, NULL);
 		if(ret==-1) {
-			sprintf(msg,"创建监听线程出错！ \n");
+			sprintf(msg,"**************************  创建监听线程出错!  *************************\n");
 			display_info(msg);
 			close(listen_fd);
 			return;
 		}
 
 		//成功后输出提示信息
-		sprintf(msg,"          服务器端开启成功！服务器在端口：%d 准备接受连接！ \n",SERVER_PORT_NO);
+		sprintf(msg,"************  服务器端开启成功！服务器在端口：%d 准备接受连接!  ************\n",SERVER_PORT_NO);
 		display_info(msg);
 		is_server_opened=TRUE;
 
@@ -122,7 +123,7 @@ void stopserver()
 		pthread_cancel(listentid);
 		pthread_join(listentid,NULL);
 		close(listen_fd);
-		sprintf(msg,"\t  服务器端成功关闭！ \n");
+		sprintf(msg,"**************************  服务器端成功关闭!  *************************\n");
 		display_info(msg);
 		is_server_opened=FALSE;
 	}
@@ -131,7 +132,7 @@ void stopserver()
 
 void otherOperate()
 {
-    printf("          关闭服务器请按s\n");
+    printf("* 关闭服务器请按s *\n");
     while ((c = getchar())!='s')
     {
         getchar();
@@ -139,7 +140,7 @@ void otherOperate()
             stopserver();
         else
         {
-            printf("          不正确的指令，请重新输入！：\n");
+            printf("* 不正确的指令，请重新输入! *\n");
             continue;
         }
     }

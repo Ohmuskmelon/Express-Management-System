@@ -1,4 +1,3 @@
-
 /* 根据id查找用户，查找成功返回用户数据的下标，查找失败返回-1 */
 int find_user(user data, int user_num, int user_id)
 {
