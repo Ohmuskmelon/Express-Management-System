@@ -57,8 +57,6 @@ int main ()
     *user_num = user_read(user_data, MAX_USER_NUM, *user_num);
     *manager_num = read_manger(manager_data, MAX_MANAGER_NUM, *manager_num);
     *exp_num = express_read(exp_data, MAX_EXPRESS_NUM, *exp_num);
-    // for (int i=0; i<*exp_num; i++)
-    //     printf("%d %d\n", exp_data[i].id, exp_data[i].date);
     printf("**************************  服务器端建立连接  ***************************\n");
     printf("\n");
     startserver();
