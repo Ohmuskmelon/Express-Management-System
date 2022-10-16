@@ -65,25 +65,25 @@ int get_free_buff()
 /*检查线程缓冲区中是否有重复连接，因为可能客户端的通信进程终止后重新启动，此时应当终止原来它所对应的服务线程，再重新创建一个服务线程，并为这个新的服务线程分配线程缓冲区。*/
 void check_connection(unsigned long ip_addr)
 {
-	int i,j;
-	struct in_addr in;
-	char msg[BUFF_SIZE];
-	/*检查所有的线程缓冲区*/
-	pthread_mutex_lock(&buff_mutex);
-	for(i=0;i<THREAD_BUFF_NUM;i++) {
-		/*发现重复连接*/
-		if((thread_buff[i].buff_status!=BUFF_FREED)&&thread_buff[i].ip_addr==ip_addr) {
-			in.s_addr=htonl(ip_addr);
-			sprintf(msg,"重复连接：%s，旧连接将关闭！\n",inet_ntoa(in));
-			add_info(msg);
-			pthread_cancel(thread_buff[i].tid);
+	// int i,j;
+	// struct in_addr in;
+	// char msg[BUFF_SIZE];
+	// /*检查所有的线程缓冲区*/
+	// pthread_mutex_lock(&buff_mutex);
+	// for(i=0;i<THREAD_BUFF_NUM;i++) {
+	// 	/*发现重复连接*/
+	// 	if((thread_buff[i].buff_status!=BUFF_FREED)&&thread_buff[i].ip_addr==ip_addr) {
+	// 		in.s_addr=htonl(ip_addr);
+	// 		sprintf(msg,"重复连接：%s，旧连接将关闭！\n",inet_ntoa(in));
+	// 		add_info(msg);
+	// 		pthread_cancel(thread_buff[i].tid);
 
-			pthread_join(thread_buff[i].tid,NULL);
-			/*退出的线程不释放它的缓冲区，释放工作由主线程来处理*/
-			thread_buff[i].tid=0;
-			thread_buff[i].buff_status=BUFF_FREED;
-			close(thread_buff[i].conn_fd);
-		}
-	}
-	pthread_mutex_unlock(&buff_mutex);
+	// 		pthread_join(thread_buff[i].tid,NULL);
+	// 		/*退出的线程不释放它的缓冲区，释放工作由主线程来处理*/
+	// 		thread_buff[i].tid=0;
+	// 		thread_buff[i].buff_status=BUFF_FREED;
+	// 		close(thread_buff[i].conn_fd);
+	// 	}
+	// }
+	// pthread_mutex_unlock(&buff_mutex);
 }

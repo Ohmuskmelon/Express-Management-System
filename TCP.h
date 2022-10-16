@@ -1,3 +1,4 @@
+void print_thread();
 void * listen_thread(void *p)
 {
 	char msg[BUFF_SIZE];
@@ -138,10 +139,19 @@ void otherOperate()
         getchar();
         if (c == 's' || c == 'S')
             stopserver();
+		else if (c == 'c' || c == 'C') print_thread();
         else
         {
             printf("* 不正确的指令，请重新输入! *\n");
             continue;
         }
     }
+}
+
+void print_thread()
+{
+	for (int i=0; i<2; i++)
+	{
+		printf("%d %lu %d", thread_buff[i].tid, thread_buff[i].ip_addr, thread_buff[i].conn_fd);
+	}
 }

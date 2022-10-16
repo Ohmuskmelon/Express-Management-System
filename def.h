@@ -76,6 +76,7 @@
 
 int listen_fd, conn_fd;  //监听socket，连接socket
 struct sockaddr_in server, cli_addr; //服务器地址信息，客户端地址信息
+struct sockaddr tcpaddr;
 int ret, buffer_index, i,cli_len;
 unsigned long ip_addr;
 int flag=1;

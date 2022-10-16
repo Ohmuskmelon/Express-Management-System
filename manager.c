@@ -123,6 +123,8 @@ int re_connect();
 
 int socket_fd;             //连接socket
 struct sockaddr_in server; //服务器地址信息，客户端地址信息
+struct hostent *hp;
+char honame[20] = "127.0.0.1";
 int ret, i;
 int flag = 1;
 char c;
@@ -144,6 +146,14 @@ void connectserver()
     {
         /*创建套接字*/
         socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+        if ((hp = gethostbyname(honame)) == NULL)
+        {
+            printf("ERROR!\n");
+            exit(1);
+        }
+        memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
+        server.sin_family = AF_INET;
+        server.sin_port = htons(SERVER_PORT_NO);
         if (socket_fd < 0)
         {
             sprintf(msg, "创建套接字出错！ \n");
@@ -156,10 +166,10 @@ void connectserver()
         time_out.tv_usec = 0;
         setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, &time_out, sizeof(time_out));
 
-        /*填写服务器的地址信息*/
-        server.sin_family = AF_INET;
-        server.sin_addr.s_addr = inet_addr("127.0.0.1"); // htonl(INADDR_ANY);
-        server.sin_port = htons(SERVER_PORT_NO);
+        // /*填写服务器的地址信息*/
+        // server.sin_family = AF_INET;
+        // server.sin_addr.s_addr = inet_addr("127.0.0.1"); // htonl(INADDR_ANY);
+        // server.sin_port = htons(SERVER_PORT_NO);
 
         /*连接服务器*/
         ret = connect(socket_fd, (struct sockaddr *)&server, sizeof(server));
