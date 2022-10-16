@@ -227,7 +227,7 @@ int manager_change_password(user user_data, int user_num, int user_id, int passw
         break;
     }
     receive_message.type = type;
-    sprintf(t_data->msg, "* ID为%d的管理员申请更改密码, %s *\n", user_id, result_message);
+    sprintf(t_data->msg, "* 管理员申请更改id为%d的密码, %s *\n", user_id, result_message);
     add_info(t_data->msg);
     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
@@ -239,7 +239,9 @@ int manager_change_password(user user_data, int user_num, int user_id, int passw
 /* 用户查看快递函数 */
 int user_check_expresses(express exp_data, int exp_num, user user_data, int user_num, int user_id, thread_data *t_data)
 {
-    int result[DEFAULT_SIZE];
+    int user_index = find_user(user_data, user_num, user_id);
+    int list_num = user_data[user_index].express_num;
+    int result[list_num];
     int express_num = find_user_express(exp_data, exp_num, user_data, user_num, user_id, result);
     recv_message receive_message;
     receive_message.type = OK;

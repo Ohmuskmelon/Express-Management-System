@@ -38,7 +38,7 @@
 
 #define ROOM_NUM 6 //教学楼总数
 
-# define DEFAULT_SIZE 100
+# define RESULT_NUM 10
 # define BUFF_SIZE 1024
 # define SEND_BUFF_SIZE 4096
 # define RECV_BUFF_SIZE 4096

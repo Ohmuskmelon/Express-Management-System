@@ -40,7 +40,7 @@ int write_user(user user, int max, int begin, int end)
 }
 
 /*从manger中读出来*/
-void read_manger(user user, int max, int now)
+int read_manger(user user, int max, int now)
 {
     int id, password;
     FILE *fp;
@@ -55,6 +55,7 @@ void read_manger(user user, int max, int now)
         now++;
     }
     fclose(fp);
+    return now;
 }
 
 /*写入manger文件*/

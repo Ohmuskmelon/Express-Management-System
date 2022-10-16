@@ -41,8 +41,8 @@
 
 #define DEFAULT_SIZE 100
 #define BUFF_SIZE 512
-#define SEND_BUFF_SIZE 1024
-#define RECV_BUFF_SIZE 512
+#define SEND_BUFF_SIZE 4096
+#define RECV_BUFF_SIZE 4096
 
 #define DEFAULT_TYPE 0
 #define USER_SIGN_UP 1
@@ -67,14 +67,12 @@
 /*定义线程缓冲区的使用状态*/
 #define BUFF_OCCUPIED 1
 #define BUFF_FREED 0
-#define BUFF_SIZE 512
+// #define BUFF_SIZE 512
 
 #define USER_NUMBER 100
 #define EXPRESS_NUMBER 100
 
 #define MAX 100 //总数
-
-int re_connect();
 
 typedef struct user_message
 {
@@ -117,9 +115,11 @@ typedef struct send_message
 typedef struct recv_message
 {
     int type;
-    express_info *express_list;
+    express_info express_list[10];
     int list_num;
 } recv_message;
+
+int re_connect();
 
 int socket_fd;             //连接socket
 struct sockaddr_in server; //服务器地址信息，客户端地址信息

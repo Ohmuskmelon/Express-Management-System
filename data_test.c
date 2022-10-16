@@ -212,7 +212,7 @@ void remove_express_by_id(express exp_data, int exp_num, int exp_id, user user_d
 void print_user(user user_data, int num)
 {
     for (int i=0; i<num; i++)
-        printf("%d %d %d\n", user_data[i].id, user_data[i].password, user_data[i].isIn);
+        printf("%d %d %d %d\n", user_data[i].id, user_data[i].password, user_data[i].isIn, user_data[i].express_num);
 }
 
 void print_exp(express exp_data, int num)
