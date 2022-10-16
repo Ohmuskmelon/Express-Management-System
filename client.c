@@ -118,20 +118,6 @@ typedef struct recv_message
     express_info express_list[10];
     int list_num;
 } recv_message;
-// typedef struct send_message
-// {
-//     int type;
-//     int user_id;
-//     int exp_id;
-//     int password;
-// } send_message;
-
-// typedef struct recv_message
-// {
-//     int type;
-//     express_info* express_list;
-//     int list_num;
-// }recv_message;
 
 int socket_fd;             //连接socket
 struct sockaddr_in server; //服务器地址信息，客户端地址信息
@@ -160,7 +146,7 @@ void connectserver()
         socket_fd = socket(AF_INET, SOCK_STREAM, 0);
         if (socket_fd < 0)
         {
-            sprintf(msg, "创建套接字出错！ \n");
+            sprintf(msg, "\t 创建套接字出错！ \n");
             display_info(msg);
             return;
         }
@@ -179,7 +165,7 @@ void connectserver()
         ret = connect(socket_fd, (struct sockaddr *)&server, sizeof(server));
         if (ret < 0)
         {
-            sprintf(msg, "\t \t连接服务器 %d 出错！\n", SERVER_PORT_NO);
+            sprintf(msg, "\t \t 连接服务器 %d 出错！\n", SERVER_PORT_NO);
             display_info(msg);
             close(socket_fd);
             re_connect();
@@ -187,7 +173,7 @@ void connectserver()
         }
 
         //成功后输出提示信息
-        printf("\t\t连接服务器成功！\n");
+        printf("\t \t 连接服务器成功！\n");
 
         isconnected = TRUE;
     }
@@ -198,7 +184,7 @@ int re_connect()
 {
     if (ret < 0)
     {
-        printf("重连？【y/n】");
+        printf("是否需要与服务器重新连接？【y/n】");
         c = getchar();
         getchar();
         if (c == 'y')
@@ -227,6 +213,7 @@ void disconnect()
 /*user_sign_up函数*/
 int user_signup(int id, int password)
 {
+    int isIn;
     char msg[512];
     char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
@@ -253,18 +240,27 @@ int user_signup(int id, int password)
     }
     memcpy(&temo, recv_buf, sizeof(recv_message));
     if (temo.type == OK)
+    {
         sprintf(msg, "恭喜你，注册成功！");
+        isIn = TRUE;
+    }
     else if (temo.type == ALREADY_EXITS)
+    {
         sprintf(msg, "账号已经存在");
+        isIn = FALSE;
+    }
     else
     {
         sprintf(msg, "不好意思，服务器出错了。");
+        isIn = FALSE;
     }
     display_info(msg);
+    return isIn;
 }
 // user_sign_in函数
 int user_signin(int id, int password)
 {
+    int isIn = FALSE;
     char msg[512];
     char send_buf[SEND_BUFF_SIZE], recv_buf[RECV_BUFF_SIZE];
 
@@ -291,7 +287,10 @@ int user_signin(int id, int password)
     }
     memcpy(&temo, recv_buf, sizeof(recv_message));
     if (temo.type == OK)
+    {
         sprintf(msg, "恭喜你，登录成功！");
+        isIn = TRUE;
+    }
     else if (temo.type == NOT_EXITS)
         sprintf(msg, "不好意思，账号不存在。");
     else if (temo.type == WRONG_PASSWORD)
@@ -301,6 +300,7 @@ int user_signin(int id, int password)
         sprintf(msg, "不好意思，服务器出错了。");
     }
     display_info(msg);
+    return isIn;
 }
 // user_change_pass函数
 int user_changepass(int id, int password)
@@ -358,19 +358,21 @@ int user_check(int id)
     /*发送出错*/
     if (ret == -1)
     {
-        printf("\t发送失败！请重新发送！\n");
+        printf("\t 发送失败！请重新发送！\n");
         return (1);
     }
     ret = recv(socket_fd, recv_buf, sizeof(recv_message), 0);
     if (ret == -1)
     {
-        printf("\t服务器端接收失败！请重新发送！\n");
+        printf("\t 服务器端接收失败！请重新发送！\n");
         return (1);
     }
     memcpy(&temo, recv_buf, sizeof(recv_message));
+    if (temo.list_num == 0) printf("您没有快递！\n");
+    else printf("您的快递信息如下！\n");
     for (int i = 0; i < temo.list_num; i++)
     {
-        sprintf(msg, "\t快递单号：%d, 用户名：%d, 时间：%d%d\n", temo.express_list[i].id, temo.express_list[i].user_id, temo.express_list[i].date, temo.express_list[i].time);
+        sprintf(msg, "快递单号：%d, 用户名：%d, 时间：%d%d\n", temo.express_list[i].id, temo.express_list[i].user_id, temo.express_list[i].date, temo.express_list[i].time);
         display_info(msg);
     }
 }
@@ -393,18 +395,18 @@ int user_getall(int id)
     /*发送出错*/
     if (ret == -1)
     {
-        printf("\t发送失败！请重新发送！\n");
+        printf("\t 发送失败！请重新发送！\n");
         return (1);
     }
     ret = recv(socket_fd, recv_buf, sizeof(recv_message), 0);
     if (ret == -1)
     {
-        printf("\t服务器端接收失败！请重新发送！\n");
+        printf("\t 服务器端接收失败！请重新发送！\n");
         return (1);
     }
     memcpy(&temo, recv_buf, sizeof(recv_message));
     if (temo.type == OK)
-        sprintf(msg, "快递已全部取出！");
+        sprintf(msg, "快递已全部取出! 共取出了%d件快递", temo.list_num);
     else
     {
         sprintf(msg, "不好意思，服务器出错了。");
@@ -414,47 +416,61 @@ int user_getall(int id)
 
 void otherOperate()
 {
-    int user_id, password, expid;
+    int user_id = 0, password, expid;
     int isIn = FALSE;
     char s;
+    printf("\t \t 您好，欢迎使用快递管理系统用户端\n");
     printf("\t \t 与服务器断开连接请按 q\n");
     printf("\t \t 注册账号并登录请按 u\n");
     printf("\t \t 登录账号请按 i\n");
-    printf("\t \t 更改账号密码请按 c\n");
+    // printf("\t \t 更改账号密码请按 c\n");
     printf("\t \t 查看快递请按 e\n");
-    printf("\t \t 全部取出快递请按 o\n");
+    printf("\t \t 取出全部快递请按 o\n");
     while ((s = getchar()) != 'q')
     {
         printf("\t \t 与服务器断开连接请按 q\n");
         printf("\t \t 注册账号并登录请按 u\n");
         printf("\t \t 登录账号请按 i\n");
-        printf("\t \t 更改账号密码请按 c\n");
+        // printf("\t \t 更改账号密码请按 c\n");
         printf("\t \t 查看快递请按 e\n");
-        printf("\t \t 全部取出快递请按 o\n");
+        printf("\t \t 取出全部快递请按 o\n");
         switch (s)
         {
         case 'u':
         {
+            if (isIn == TRUE)
+            {
+                printf("您已登录！ID为：%d\n", user_id);
+                break;
+            }
             printf("请输入账号：\n");
             scanf("%d", &user_id);
             printf("请输入密码：\n");
             scanf("%d", &password);
-            user_signup(user_id, password);
-            isIn = TRUE;
+            isIn = user_signup(user_id, password);
             break;
         }
         case 'i':
         {
+            if (isIn == TRUE)
+            {
+                printf("您已登录！ID为：%d\n", user_id);
+                break;
+            }
             printf("请输入账号：\n");
             scanf("%d", &user_id);
             printf("请输入密码：\n");
             scanf("%d", &password);
-            user_signin(user_id, password);
-            isIn = TRUE;
+            isIn = user_signin(user_id, password);
             break;
         }
         case 'c':
         {
+            if (isIn == TRUE)
+            {
+                printf("您已登录！ID为：%d\n", user_id);
+                break;
+            }
             printf("请输入账号：\n");
             scanf("%d", &user_id);
             printf("请输入密码：\n");
@@ -467,11 +483,9 @@ void otherOperate()
         {
             if (isIn == FALSE)
             {
-                printf("您还未登录！\n");
+                printf("您还未登录! 请先注册或登录\n");
                 break;
             }
-            printf("请输入要查询的ID：\n");
-            scanf("%d", &user_id);
             user_check(user_id);
             break;
         }
@@ -479,11 +493,9 @@ void otherOperate()
         {
             if (isIn == FALSE)
             {
-                printf("您还未登录！\n");
+                printf("您还未登录! 请先注册或登录\n");
                 break;
             }
-            printf("请输入账号：\n");
-            scanf("%d", &user_id);
             user_getall(user_id);
             break;
         }

@@ -265,41 +265,42 @@ int user_check_expresses(express exp_data, int exp_num, user user_data, int user
 /* 按索引取出单个快递函数 */
 void get_single_express_by_index(express exp_data, int exp_num, int exp_index, user user_data, int user_num, int user_id, thread_data *t_data)
 {
-    recv_message receive_message;
-    receive_message.type = OK;
     remove_express_by_index(exp_data, exp_num, exp_index, user_data, user_num);
     int exp_id = exp_data[exp_index].id;
     sprintf(t_data->msg, "* ID为%d的用户取出了快递, ID为%d! *\n", user_id, exp_id);
     add_info(t_data->msg);
-    memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
-    t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
-    if (t_data->ret < 0)
-        thread_err("* 发送数据出错! *\n", t_data->buff_index);
 }
 
-/* 按id取出单个快递 */
-void get_single_express_by_id(express exp_data, int exp_num, int exp_id, user user_data, int user_num, int user_id, thread_data *t_data)
-{
-    recv_message receive_message;
-    receive_message.type = OK;
-    remove_express_by_id(exp_data, exp_num, exp_id, user_data, user_num);
-    sprintf(t_data->msg, "* ID为%d的用户取出了快递, ID为%d! *\n", user_id, exp_id);
-    add_info(t_data->msg);
-    memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
-    t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
-    if (t_data->ret < 0)
-        thread_err("* 发送数据出错! *\n", t_data->buff_index);
-}
+// /* 按id取出单个快递 */
+// void get_single_express_by_id(express exp_data, int exp_num, int exp_id, user user_data, int user_num, int user_id, thread_data *t_data)
+// {
+//     recv_message receive_message;
+//     receive_message.type = OK;
+//     remove_express_by_id(exp_data, exp_num, exp_id, user_data, user_num);
+//     sprintf(t_data->msg, "* ID为%d的用户取出了快递, ID为%d! *\n", user_id, exp_id);
+//     add_info(t_data->msg);
+//     memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
+//     t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
+//     if (t_data->ret < 0)
+//         thread_err("* 发送数据出错! *\n", t_data->buff_index);
+// }
 
 /* 用户取出所有快递 */
 void get_all_expresses_out(express exp_data, int exp_num, user user_data, int user_num, int user_id, thread_data *t_data)
 {
+    recv_message receive_message;
+    receive_message.type = OK;
     int user_index = find_user(user_data, user_num, user_id);
     int list_num = user_data[user_index].express_num;
     int list[list_num];
+    receive_message.list_num = list_num;
     find_user_express(exp_data, exp_num, user_data, user_num, user_id, list);
     for (int i = 0; i < list_num; i++)
         get_single_express_by_index(exp_data, exp_num, list[i], user_data, user_num, user_id, t_data);
+    memcpy(t_data->send_buf, &receive_message, sizeof(receive_message));
+    t_data->ret = send(t_data->conn_fd, t_data->send_buf, sizeof(receive_message), 0);
+    if (t_data->ret < 0)
+        thread_err("* 发送数据出错! *\n", t_data->buff_index);
 }
 
 /* 管理员添加快递 */

@@ -173,7 +173,7 @@ void connectserver()
         }
 
         //成功后输出提示信息
-        printf("\t\t连接服务器成功！\n");
+        printf("\t\t 连接服务器成功！\n");
 
         isconnected = TRUE;
     }
@@ -195,6 +195,7 @@ void disconnect()
 /*manger_sign_up函数*/
 int manger_signup(int id, int password)
 {
+    int isIn = FALSE;
     char msg[512];
     char send_buf[512], recv_buf[512];
 
@@ -221,17 +222,22 @@ int manger_signup(int id, int password)
     }
     memcpy(&temo, recv_buf, sizeof(recv_message));
     if (temo.type == OK)
+    {
         sprintf(msg, "恭喜你，注册成功！");
+        isIn = TRUE;
+    }
     else if (temo.type == ALREADY_EXITS)
         sprintf(msg, "账号已经存在");
     else
         sprintf(msg, "不好意思，服务器出错了。");
     display_info(msg);
+    return isIn;
 }
 
 // manger_sign_in函数
 int manger_signin(int id, int password)
 {
+    int isIn = FALSE;
     char msg[512];
     char send_buf[512], recv_buf[512];
 
@@ -257,7 +263,10 @@ int manger_signin(int id, int password)
     }
     memcpy(&temo, recv_buf, sizeof(recv_message));
     if (temo.type == OK)
+    {
         sprintf(msg, "恭喜你，登录成功！");
+        isIn = TRUE;
+    }
     else if (temo.type == NOT_EXITS)
         sprintf(msg, "不好意思，账号不存在。");
     else if (temo.type == WRONG_PASSWORD)
@@ -350,56 +359,68 @@ void otherOperate()
     int user_id, password, expid;
     int isIn = FALSE;
     char s;
-    printf("\t \t与服务器断开连接请按 q\n");
+    printf("\t \t 您好，欢迎使用快递管理系统管理员端\n");
+    printf("\t \t 与服务器断开连接请按 q\n");
     printf("\t \t 注册管理员账号并登录请按 u\n");
     printf("\t \t 登录管理员账号请按 i\n");
-    printf("\t \t 更改管理员账号密码请按 c\n");
+    printf("\t \t 更改用户密码请按 c\n");
     printf("\t \t 添加快递信息请按 e\n");
-
     while ((s = getchar()) != 'q')
     {
-        printf("\t \t与服务器断开连接请按 q\n");
+        printf("\t \t 与服务器断开连接请按 q\n");
         printf("\t \t 注册管理员账号并登录请按 u\n");
         printf("\t \t 登录管理员账号请按 i\n");
-        printf("\t \t 更改管理员账号密码请按 c\n");
+        printf("\t \t 更改用户密码请按 c\n");
         printf("\t \t 添加快递信息请按 e\n");
         switch (s)
         {
         case 'u':
         {
+            if (isIn == TRUE)
+            {
+                printf("您已登录！ID为：%d\n", user_id);
+                break;
+            }
             printf("请输入账号：\n");
             scanf("%d", &user_id);
             printf("请输入密码：\n");
             scanf("%d", &password);
-            manger_signup(user_id, password);
-            isIn = TRUE;
+            isIn = manger_signup(user_id, password);
             break;
         }
         case 'i':
         {
+            if (isIn == TRUE)
+            {
+                printf("您已登录！ID为：%d\n", user_id);
+                break;
+            }
             printf("请输入账号：\n");
             scanf("%d", &user_id);
             printf("请输入密码：\n");
             scanf("%d", &password);
-            manger_signin(user_id, password);
-            isIn = TRUE;
+            isIn = manger_signin(user_id, password);
             break;
         }
         case 'c':
         {
-            printf("请输入账号：\n");
+            if (isIn == FALSE)
+            {
+                printf("您还未登录! 请先注册或登录\n");
+                break;
+            }
+            printf("请输入所要修改用户的账号：\n");
             scanf("%d", &user_id);
-            printf("请输入密码：\n");
+            printf("请输入所要修改用户的密码：\n");
             scanf("%d", &password);
             manger_changepass(user_id, password);
-            isIn = TRUE;
             break;
         }
         case 'e':
         {
             if (isIn == FALSE)
             {
-                printf("您还未登录！\n");
+                printf("您还未登录! 请先注册或登录\n");
                 break;
             }
             printf("请输入添加快递的用户：\n");
@@ -423,7 +444,7 @@ int re_connect()
 {
     if (ret < 0)
     {
-        printf("重连？【y/n】");
+        printf("是否需要重连？【y/n】");
         c = getchar();
         getchar();
         if (c == 'y')
