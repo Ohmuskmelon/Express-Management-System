@@ -1,0 +1,39 @@
+Date : 2022-12-20 21:16:33
+Directory : /Users/gangnam/Downloads/Express-Management-System
+Total : 12 files,  2120 codes, 171 comments, 201 blanks, all 2492 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C        |          5 |      1,260 |        100 |        121 |      1,481 |
+| C++      |          6 |        858 |         71 |         78 |      1,007 |
+| Markdown |          1 |          2 |          0 |          2 |          4 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                     | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                        |         12 |      2,120 |        171 |        201 |      2,492 |
+| server                                                                   |          9 |      1,249 |        111 |        111 |      1,471 |
++--------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                 | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/gangnam/Downloads/Express-Management-System/README.md             | Markdown |          2 |          0 |          2 |          4 |
+| /Users/gangnam/Downloads/Express-Management-System/client.c              | C        |        460 |         33 |         44 |        537 |
+| /Users/gangnam/Downloads/Express-Management-System/manager.c             | C        |        409 |         27 |         44 |        480 |
+| /Users/gangnam/Downloads/Express-Management-System/server/TCP.h          | C++      |        120 |         17 |         20 |        157 |
+| /Users/gangnam/Downloads/Express-Management-System/server/data.h         | C++      |        136 |          9 |          8 |        153 |
+| /Users/gangnam/Downloads/Express-Management-System/server/data_test.c    | C        |        275 |         10 |         21 |        306 |
+| /Users/gangnam/Downloads/Express-Management-System/server/def.h          | C++      |        134 |         11 |         31 |        176 |
+| /Users/gangnam/Downloads/Express-Management-System/server/excute.h       | C++      |        302 |         23 |         10 |        335 |
+| /Users/gangnam/Downloads/Express-Management-System/server/fileio.h       | C++      |        112 |          5 |          5 |        122 |
+| /Users/gangnam/Downloads/Express-Management-System/server/server.c       | C        |         65 |          0 |          4 |         69 |
+| /Users/gangnam/Downloads/Express-Management-System/server/serverthread.h | C++      |         54 |          6 |          4 |         64 |
+| /Users/gangnam/Downloads/Express-Management-System/server/threadbuff.h   | C        |         51 |         30 |          8 |         89 |
+| Total                                                                    |          |      2,120 |        171 |        201 |      2,492 |
++--------------------------------------------------------------------------+----------+------------+------------+------------+------------+

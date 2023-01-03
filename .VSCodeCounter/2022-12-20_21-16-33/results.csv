@@ -1,0 +1,14 @@
+"filename", "language", "C", "C++", "Markdown", "comment", "blank", "total"
+"/Users/gangnam/Downloads/Express-Management-System/README.md", "Markdown", 0, 0, 2, 0, 2, 4
+"/Users/gangnam/Downloads/Express-Management-System/client.c", "C", 460, 0, 0, 33, 44, 537
+"/Users/gangnam/Downloads/Express-Management-System/manager.c", "C", 409, 0, 0, 27, 44, 480
+"/Users/gangnam/Downloads/Express-Management-System/server/TCP.h", "C++", 0, 120, 0, 17, 20, 157
+"/Users/gangnam/Downloads/Express-Management-System/server/data.h", "C++", 0, 136, 0, 9, 8, 153
+"/Users/gangnam/Downloads/Express-Management-System/server/data_test.c", "C", 275, 0, 0, 10, 21, 306
+"/Users/gangnam/Downloads/Express-Management-System/server/def.h", "C++", 0, 134, 0, 11, 31, 176
+"/Users/gangnam/Downloads/Express-Management-System/server/excute.h", "C++", 0, 302, 0, 23, 10, 335
+"/Users/gangnam/Downloads/Express-Management-System/server/fileio.h", "C++", 0, 112, 0, 5, 5, 122
+"/Users/gangnam/Downloads/Express-Management-System/server/server.c", "C", 65, 0, 0, 0, 4, 69
+"/Users/gangnam/Downloads/Express-Management-System/server/serverthread.h", "C++", 0, 54, 0, 6, 4, 64
+"/Users/gangnam/Downloads/Express-Management-System/server/threadbuff.h", "C", 51, 0, 0, 30, 8, 89
+"Total", "-", 1260, 858, 2, 171, 201, 2492
