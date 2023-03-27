@@ -1,4 +1,3 @@
-void print_thread();
 void * listen_thread(void *p)
 {
 	char msg[BUFF_SIZE];

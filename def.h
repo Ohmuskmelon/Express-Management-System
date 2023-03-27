@@ -174,3 +174,47 @@ user USER_DATA;
 user MANAGER_DATA;
 
 express EXPRESS_DATA;
+
+int find_user(user data, int user_num, int user_id);
+int add_user(user data, int user_num, int user_maxnum, int user_id, int password);
+int check_user(user data, int user_num, int user_id, int password);
+int change_user_password(user data, int user_num, int user_id, int password);
+int add_express(express exp_data, user user_data, int exp_num, int exp_maxnum, int user_num, int user_id);
+int find_user_express(express exp_data, int exp_num, user user_data, int user_num, int user_id, int* result);
+int find_single_express(express exp_data, int exp_num, int exp_id);
+void remove_express_by_index(express exp_data, int exp_num, int exp_index, user user_data, int user_num);
+void remove_express_by_id(express exp_data, int exp_num, int exp_id, user user_data, int user_num);
+
+void user_sign_up(user user_data, int *user_num, int user_id, int password, thread_data *t_data);
+int user_sign_in(user user_data, int user_num, int user_id, int password, thread_data *t_data);
+int user_change_password(user user_data, int user_num, int user_id, int password, thread_data *t_data);
+void manager_sign_up(user user_data, int *user_num, int user_id, int password, thread_data *t_data);
+int manager_sign_in(user user_data, int user_num, int user_id, int password, thread_data *t_data);
+int manager_change_password(user user_data, int user_num, int user_id, int password, thread_data *t_data);
+int user_check_expresses(express exp_data, int exp_num, user user_data, int user_num, int user_id, thread_data *t_data);
+void get_single_express_by_index(express exp_data, int exp_num, int exp_index, user user_data, int user_num, int user_id, thread_data *t_data);
+void get_all_expresses_out(express exp_data, int exp_num, user user_data, int user_num, int user_id, thread_data *t_data);
+int manager_add_express(express exp_data, user user_data, int *exp_num, int exp_maxnum, int user_num, int user_id, thread_data *t_data);
+
+int user_read(user user, int max, int now);
+int write_user(user user, int max, int begin, int end);
+int read_manger(user user, int max, int now);
+void write_manager(user user, int max, int begin, int end);
+int express_read(express exp_data, int max, int now);
+int write_express(express exp_data, int max, int begin, int end);
+
+void * service_thread(void *p);
+
+void * listen_thread(void *p);
+void startserver();
+void stopserver();
+void otherOperate();
+void print_thread();
+
+void add_info(char *src);
+void display_info(char *msg);
+void free_buff(int index);
+static void thread_err(char *s, int index);
+void init_thread_buff();
+int get_free_buff();
+void check_connection(unsigned long ip_addr);
